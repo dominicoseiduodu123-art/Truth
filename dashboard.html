@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cooperative Management Dashboard</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #102247;
+      background: #f2f5ff;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      min-height: 100vh;
+    }
+
+    aside {
+      display: flex;
+      flex-direction: column;
+      padding: 20px 12px;
+      color: white;
+      background: #06275d;
+    }
+
+    .brand {
+      margin: 10px 0 30px;
+      text-align: center;
+      font-size: 17px;
+      font-weight: bold;
+      line-height: 1.2;
+    }
+
+    .brand-icon {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 38px;
+    }
+
+    nav { display: grid; gap: 8px; }
+
+    nav a {
+      padding: 11px 10px;
+      border-radius: 24px;
+      color: white;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    nav a span { margin-right: 10px; font-size: 19px; }
+    nav a.active { background: #0872fa; }
+    nav a.logout { margin-top: 12px; border-top: 1px solid #527096; border-radius: 0; padding-top: 18px; }
+    .slogan { margin-top: auto; padding-top: 24px; text-align: center; font-style: italic; font-size: 12px; }
+
+    main { min-width: 0; padding: 20px 16px; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .menu { border: 0; background: none; color: #102247; font-size: 28px; }
+    .heading { flex: 1; }
+    h1 { margin: 0 0 4px; font-size: 30px; }
+    .heading p { margin: 0; }
+
+    .admin {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px 5px 5px;
+      border-radius: 30px;
+      background: white;
+      font-size: 14px;
+    }
+
+    .avatar {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      place-items: center;
+      border-radius: 50%;
+      background: #dceaff;
+      font-size: 23px;
+    }
+
+    .stats, .actions {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 108px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--tint);
+      box-shadow: 0 4px 12px #17376d16;
+    }
+
+    .stat-icon { color: var(--accent); font-size: 38px; }
+    .stat strong { display: block; font-size: 34px; }
+    .stat small { font-size: 12px; }
+
+    .blue { --accent: #0755bd; --tint: #e2efff; --border: #b7d3fb; }
+    .green { --accent: #078f4c; --tint: #e2f8ed; --border: #b8e8ce; }
+    .orange { --accent: #ef5b00; --tint: #fff0dc; --border: #f6d7ad; }
+    .purple { --accent: #6813be; --tint: #f2e8ff; --border: #dfc6ff; }
+
+    h2 { margin: 18px 2px 10px; font-size: 21px; }
+
+    .action {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 63px;
+      padding: 12px;
+      border: 0;
+      border-radius: 14px;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .action span:first-child { font-size: 27px; }
+    .action span:last-child { margin-left: auto; }
+    .a-blue { background: #0962e8; }
+    .a-green { background: #079c43; }
+    .a-purple { background: #7110c5; }
+    .a-orange { background: #f46a00; }
+
+    .lower {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .panel {
+      overflow: hidden;
+      border: 1px solid #dce3f3;
+      border-radius: 16px;
+      background: white;
+      box-shadow: 0 4px 12px #17376d16;
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      color: white;
+      background: #082e6c;
+      font-weight: bold;
+    }
+
+    .view { margin-left: auto; color: white; text-decoration: none; font-size: 13px; font-weight: normal; }
+
+    .activity {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-height: 58px;
+      padding: 8px 14px;
+      border-bottom: 1px solid #edf0f7;
+    }
+
+    .bubble {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      flex: none;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      font-size: 19px;
+    }
+
+    .bubble.green { background: #0b9f55; }
+    .bubble.blue { background: #0873ed; }
+    .bubble.purple { background: #7626ce; }
+
+    .activity-text { flex: 1; }
+    .activity-text strong, .activity-text small { display: block; }
+    .activity-text strong { font-size: 14px; }
+    .activity-text small, .time { color: #56627a; font-size: 12px; }
+    .time { white-space: nowrap; align-self: flex-start; margin-top: 5px; }
+
+    .roles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 12px 16px;
+    }
+
+    .role-list { padding-right: 18px; border-right: 2px solid #e2e8f3; }
+    .role { display: flex; align-items: center; gap: 9px; margin: 8px 0; font-size: 14px; }
+    .role b { margin-left: auto; padding: 4px 10px; border-radius: 20px; background: #eff2fa; }
+    .role-icon { font-size: 20px; }
+    .message { padding: 8px; text-align: center; font-size: 14px; font-weight: bold; line-height: 1.35; }
+    .people { display: block; color: #078c4d; font-size: 44px; }
+
+    @media (max-width: 850px) {
+      .layout { grid-template-columns: 145px 1fr; }
+      .stats, .actions { grid-template-columns: repeat(2, 1fr); }
+      .lower { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .layout { display: block; }
+      aside { padding: 10px; }
+      .brand { margin: 0 0 10px; font-size: 15px; }
+      .brand-icon { display: none; }
+      nav { grid-template-columns: repeat(3, 1fr); gap: 4px; }
+      nav a { padding: 8px 4px; text-align: center; font-size: 11px; }
+      nav a span { margin-right: 3px; }
+      nav a.logout { margin: 0; border: 0; padding: 8px 4px; }
+      .slogan { display: none; }
+      main { padding: 15px 12px; }
+      h1 { font-size: 24px; }
+      .heading p { font-size: 13px; }
+      .admin { font-size: 0; }
+      .avatar { width: 36px; height: 36px; }
+      .stats { gap: 8px; }
+      .stat { min-height: 90px; padding: 9px; gap: 8px; }
+      .stat-icon { font-size: 30px; }
+      .stat strong { font-size: 28px; }
+      .stat small { font-size: 10px; }
+      .actions { gap: 8px; }
+      .action { gap: 6px; padding: 9px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="brand">
+        <span class="brand-icon">🤝</span>
+        Cooperative<br>Management<br>System
+      </div>
+
+      <nav>
+        <a class="active" href="#"><span>⌂</span>Dashboard</a>
+        <a href="#"><span>🏛</span>Cooperatives</a>
+        <a href="#"><span>👥</span>Users</a>
+        <a href="#"><span>🛡</span>Roles</a>
+        <a href="#"><span>⚙</span>Settings</a>
+        <a class="logout" href="#"><span>⇥</span>Logout</a>
+      </nav>
+
+      <div class="slogan">Stronger Together</div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <button class="menu" aria-label="Menu">☰</button>
+        <div class="heading">
+          <h1>Dashboard</h1>
+          <p>Manage cooperatives, users and roles.</p>
+        </div>
+        <div class="admin"><span class="avatar">👤</span>Admin ⌄</div>
+      </header>
+
+      <section class="stats">
+        <article class="stat blue"><span class="stat-icon">🏛</span><div><strong>12</strong><small>Total Cooperatives</small></div></article>
+        <article class="stat green"><span class="stat-icon">👥</span><div><strong>85</strong><small>Total Users</small></div></article>
+        <article class="stat orange"><span class="stat-icon">✔</span><div><strong>78</strong><small>Active Users</small></div></article>
+        <article class="stat purple"><span class="stat-icon">🛡</span><div><strong>4</strong><small>User Roles</small></div></article>
+      </section>
+
+      <h2>⚡ Quick Actions</h2>
+
+      <section class="actions">
+        <button class="action a-blue"><span>🏛</span>Add Cooperative<span>➜</span></button>
+        <button class="action a-green"><span>👤+</span>Add User<span>➜</span></button>
+        <button class="action a-purple"><span>✎</span>Update Record<span>➜</span></button>
+        <button class="action a-orange"><span>⚙</span>Manage Roles<span>➜</span></button>
+      </section>
+
+      <section class="lower">
+        <article class="panel">
+          <div class="panel-title">◴ Recent Activity <a class="view" href="#">View All →</a></div>
+          <div class="activity">
+            <span class="bubble green">♜</span>
+            <div class="activity-text"><strong>New Cooperative Registered</strong><small>Agape Cooperative Society</small></div>
+            <span class="time">2 hours ago</span>
+          </div>
+          <div class="activity">
+            <span class="bubble blue">👥</span>
+            <div class="activity-text"><strong>New User Added</strong><small>Mary Mensah</small></div>
+            <span class="time">3 hours ago</span>
+          </div>
+          <div class="activity">
+            <span class="bubble purple">✎</span>
+            <div class="activity-text"><strong>User Role Updated</strong><small>John Doe → Manager</small></div>
+            <span class="time">1 day ago</span>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-title">▥ User Roles</div>
+          <div class="roles">
+            <div class="role-list">
+              <div class="role"><span class="role-icon" style="color:#078c4b">♟</span>Super Admin<b>1</b></div>
+              <div class="role"><span class="role-icon" style="color:#0872ed">♟</span>Admin<b>3</b></div>
+              <div class="role"><span class="role-icon" style="color:#f27a00">♟</span>Manager<b>28</b></div>
+              <div class="role"><span class="role-icon" style="color:#7613bb">♟</span>Staff<b>53</b></div>
+            </div>
+            <div class="message">
+              <span class="people">♟♟♟</span>
+              Efficient Management<br>for a Stronger Cooperative<br>Community
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
